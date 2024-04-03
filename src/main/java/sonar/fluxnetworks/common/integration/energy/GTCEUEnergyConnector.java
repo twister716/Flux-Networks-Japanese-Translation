@@ -49,15 +49,19 @@ public class GTCEUEnergyConnector implements IBlockEnergyConnector, IItemEnergyC
         if (demand == 0) {
             return 0;
         }
-        long voltage = Math.min(container.getInputVoltage(), demand);
+        long voltage = container.getInputVoltage();
+        long amperage = container.getInputAmperage();
         if (simulate) {
-            return Math.min(voltage << 2, amount);
+            long energy = Math.min(voltage * amperage, demand);
+            return Math.min(energy << 2, amount);
         }
-        voltage = Math.min(voltage, amount >> 2);
+        long amountEu = amount >> 2;
+        voltage = Math.min(Math.min(voltage, amountEu), demand);
         if (voltage == 0) {
             return 0;
         }
-        long energy = voltage * container.acceptEnergyFromNetwork(side, voltage, 1);
+        amperage = Math.min(amperage, amountEu / voltage);
+        long energy = voltage * container.acceptEnergyFromNetwork(side, voltage, amperage);
         return energy << 2;
     }
 
