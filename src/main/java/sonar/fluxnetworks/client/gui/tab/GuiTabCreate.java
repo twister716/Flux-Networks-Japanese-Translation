@@ -22,7 +22,7 @@ public class GuiTabCreate extends GuiTabEditAbstract {
 
     public GuiTabCreate(@Nonnull FluxMenu menu, @Nonnull Player player) {
         super(menu, player);
-        mSecurityLevel = SecurityLevel.ENCRYPTED;
+        mSecurityLevel = SecurityLevel.PRIVATE;
     }
 
     @Override

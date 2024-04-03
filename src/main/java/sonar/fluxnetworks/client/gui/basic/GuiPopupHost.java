@@ -89,7 +89,8 @@ public abstract class GuiPopupHost extends GuiFocusable {
         }
         boolean focused = false;
         for (GuiEventListener child : children()) {
-            if (child instanceof EditBox editBox && editBox.isFocused()) {
+            if (child instanceof EditBox editBox && editBox.isFocused() &&
+                    editBox.isMouseOver(mouseX, mouseY)) {
                 focused = true;
                 break;
             }

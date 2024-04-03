@@ -57,15 +57,18 @@ public abstract class GuiFocusable extends AbstractContainerScreen<FluxMenu> {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         InputConstants.Key key = InputConstants.getKey(keyCode, scanCode);
         if (getFocused() != null) {
-            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE ||
+                    keyCode == GLFW.GLFW_KEY_ENTER ||
+                    keyCode == GLFW.GLFW_KEY_KP_ENTER) {
                 setFocused(null);
                 return true;
             }
             if (getMinecraft().options.keyInventory.isActiveAndMatches(key)) {
-                return false; // allows the typing of "E"
+                // consume the event if there's a focus
+                return true;
             }
         } else if (keyCode == GLFW.GLFW_KEY_ESCAPE || getMinecraft().options.keyInventory.isActiveAndMatches(key)) {
-            if (this instanceof GuiPopupCore core) {
+            if (this instanceof GuiPopupCore<?> core) {
                 core.mHost.closePopup();
                 return true;
             }
@@ -78,7 +81,9 @@ public abstract class GuiFocusable extends AbstractContainerScreen<FluxMenu> {
             }
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        boolean result = super.keyPressed(keyCode, scanCode, modifiers);
+        // consume the event if there's a focus
+        return result || getFocused() != null;
     }
 
     @Override

@@ -8,6 +8,7 @@ import icyllis.modernui.graphics.drawable.ImageDrawable;
 import icyllis.modernui.util.*;
 import icyllis.modernui.view.*;
 import icyllis.modernui.widget.*;
+import sonar.fluxnetworks.FluxNetworks;
 import sonar.fluxnetworks.api.FluxConstants;
 import sonar.fluxnetworks.client.design.FluxDesign;
 import sonar.fluxnetworks.client.design.TabBackground;
@@ -24,8 +25,6 @@ public class FluxDeviceUI extends Fragment implements FluxMenu.OnResultListener 
     public static final int NETWORK_COLOR = 0xFF295E8A;
 
     public static final int id_tab_container = 0x0002;
-
-    public static Image sButtonIcon;
 
     private final TileFluxDevice mDevice;
 
@@ -46,12 +45,17 @@ public class FluxDeviceUI extends Fragment implements FluxMenu.OnResultListener 
 
     @Override
     public void onResult(FluxMenu menu, int key, int code) {
+        View view = getView();
+        if (view == null) {
+            return;
+        }
         DataSet result = new DataSet();
         result.putInt("code", code);
-        requireView().post(() -> getChildFragmentManager().setFragmentResult(switch (key) {
+        String requestKey = switch (key) {
             case FluxConstants.REQUEST_CREATE_NETWORK -> "create_network";
             default -> "";
-        }, result));
+        };
+        view.post(() -> getChildFragmentManager().setFragmentResult(requestKey, result));
     }
 
     @Override
@@ -65,7 +69,6 @@ public class FluxDeviceUI extends Fragment implements FluxMenu.OnResultListener 
     @Override
     public void onCreate(@Nullable DataSet savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sButtonIcon = Image.create("modernui", "gui/gui_icon.png");
 
         var fragment = new DeviceHomeTab(mDevice);
         fragment.setArguments(getArguments());
@@ -94,15 +97,13 @@ public class FluxDeviceUI extends Fragment implements FluxMenu.OnResultListener 
         buttonGroup.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
         buttonGroup.setLayoutTransition(new LayoutTransition());
 
+        var iconImage = Image.create(FluxNetworks.MODID, "gui/gui_icon.png");
+
         int buttonSize = content.dp(32);
         for (int i = 0; i < 8; i++) {
             var button = new ImageButton(requireContext());
-            var drawable = new ImageDrawable(sButtonIcon);
-            if (i == 0) {
-                drawable.setSrcRect(2, 258, 66, 322);
-            } else {
-                drawable.setSrcRect(i * 32, 352, (i + 1) * 32, 384);
-            }
+            var drawable = new ImageDrawable(iconImage);
+            drawable.setSrcRect(i * 64, 192, (i + 1) * 64, 256);
             drawable.setTintList(NAV_BUTTON_COLOR);
             button.setImageDrawable(drawable);
 

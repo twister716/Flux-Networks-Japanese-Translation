@@ -5,6 +5,7 @@ import icyllis.modernui.core.Context;
 import icyllis.modernui.fragment.Fragment;
 import icyllis.modernui.graphics.*;
 import icyllis.modernui.graphics.drawable.Drawable;
+import icyllis.modernui.mc.ContainerDrawHelper;
 import icyllis.modernui.text.InputFilter;
 import icyllis.modernui.text.method.DigitsInputFilter;
 import icyllis.modernui.util.*;
@@ -48,6 +49,8 @@ public class DeviceHomeTab extends Fragment {
         var content = new LinearLayout(requireContext());
         content.setOrientation(LinearLayout.VERTICAL);
         content.setLayoutTransition(new LayoutTransition());
+
+        var iconImage = Image.create("modernui", "gui/gui_icon.png");
 
         for (int i = 0; i < 3; i++) {
             var v = new EditText(requireContext());
@@ -109,7 +112,7 @@ public class DeviceHomeTab extends Fragment {
             v.setBackground(new RoundRectDrawable(v));
             v.setTextSize(16);
             v.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    new TextFieldStart(v, FluxDeviceUI.sButtonIcon, (((i + 1) % 3) + 1) * 64), null, null, null);
+                    new TextFieldStart(v, iconImage, (((i + 1) % 3) + 1) * 64), null, null, null);
             v.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
 
             var params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -120,7 +123,7 @@ public class DeviceHomeTab extends Fragment {
         }
 
         {
-            var v = new ConnectorView(requireContext(), FluxDeviceUI.sButtonIcon);
+            var v = new ConnectorView(requireContext(), iconImage);
             var params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
             params.setMargins(v.dp(8), v.dp(2), v.dp(8), v.dp(8));
@@ -265,9 +268,7 @@ public class DeviceHomeTab extends Fragment {
             if (boxAlpha > 0) {
                 canvas.drawRect(centerX - mSize * .5f, py2 - mSize * 2.1f,
                         centerX + mSize * .5f, py2 - mSize * 1.1f, mBoxPaint);
-                paint.reset();
-                paint.setAlpha(Math.min(255, boxAlpha << 1));
-                //CanvasForge.get(canvas).drawItemStack(mItem, centerX, py2 - mSize * 1.6f, mSize, paint);
+                ContainerDrawHelper.drawItem(canvas, mItem, centerX, py2 - mSize * 1.6f, 0, mSize, 0);
             }
             paint.recycle();
         }
