@@ -167,7 +167,7 @@ public class ServerFluxNetwork extends FluxNetwork {
             h.onCycleEnd();
             limiter += h.getRequest();
             if (h.getChange() != 0) {
-                d.markChunkUnsaved();
+                d.markEnergyChanged();
             }
         }
         mBufferLimiter = limiter;

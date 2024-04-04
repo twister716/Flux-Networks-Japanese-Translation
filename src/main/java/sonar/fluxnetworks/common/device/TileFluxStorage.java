@@ -26,7 +26,8 @@ public abstract class TileFluxStorage extends TileFluxDevice implements IFluxSto
     public static class Basic extends TileFluxStorage {
 
         public Basic(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-            super(RegistryBlockEntityTypes.BASIC_FLUX_STORAGE.get(), pos, state, new FluxStorageHandler.Basic());
+            super(RegistryBlockEntityTypes.BASIC_FLUX_STORAGE.get(), pos, state,
+                    new FluxStorageHandler.Basic());
         }
 
         @Nonnull
@@ -39,7 +40,8 @@ public abstract class TileFluxStorage extends TileFluxDevice implements IFluxSto
     public static class Herculean extends TileFluxStorage {
 
         public Herculean(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-            super(RegistryBlockEntityTypes.HERCULEAN_FLUX_STORAGE.get(), pos, state, new FluxStorageHandler.Herculean());
+            super(RegistryBlockEntityTypes.HERCULEAN_FLUX_STORAGE.get(), pos, state,
+                    new FluxStorageHandler.Herculean());
         }
 
         @Nonnull
@@ -52,7 +54,8 @@ public abstract class TileFluxStorage extends TileFluxDevice implements IFluxSto
     public static class Gargantuan extends TileFluxStorage {
 
         public Gargantuan(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-            super(RegistryBlockEntityTypes.GARGANTUAN_FLUX_STORAGE.get(), pos, state, new FluxStorageHandler.Gargantuan());
+            super(RegistryBlockEntityTypes.GARGANTUAN_FLUX_STORAGE.get(), pos, state,
+                    new FluxStorageHandler.Gargantuan());
         }
 
         @Nonnull
@@ -70,15 +73,12 @@ public abstract class TileFluxStorage extends TileFluxDevice implements IFluxSto
     @Override
     protected void onServerTick() {
         super.onServerTick();
-        if ((mFlags & FLAG_ENERGY_CHANGED) == 0 && mHandler.getChange() != 0) {
-            mFlags |= FLAG_ENERGY_CHANGED;
-        }
-        if ((mFlags & FLAG_ENERGY_CHANGED) == FLAG_ENERGY_CHANGED) {
+        if ((mFlags & FLAG_ENERGY_CHANGED) != 0) {
             //noinspection ConstantConditions
             if ((level.getGameTime() & 0b111) == 0) {
                 // update model data to players who can see it
-                Channel.get().sendToTrackingChunk(Messages.makeDeviceBuffer(this,
-                                FluxConstants.DEVICE_S2C_STORAGE_ENERGY),
+                Channel.get().sendToTrackingChunk(
+                        Messages.makeDeviceBuffer(this, FluxConstants.DEVICE_S2C_STORAGE_ENERGY),
                         level.getChunkAt(worldPosition));
                 mFlags &= ~FLAG_ENERGY_CHANGED;
             }

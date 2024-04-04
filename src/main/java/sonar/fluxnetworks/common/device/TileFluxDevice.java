@@ -14,9 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.world.ForgeChunkManager;
 import net.minecraftforge.network.NetworkHooks;
@@ -31,9 +29,7 @@ import sonar.fluxnetworks.common.util.FluxUtils;
 import sonar.fluxnetworks.register.Channel;
 import sonar.fluxnetworks.register.Messages;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.*;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -474,6 +470,14 @@ public abstract class TileFluxDevice extends BlockEntity implements IFluxDevice 
     public void markChunkUnsaved() {
         assert level != null;
         level.getChunkAt(worldPosition).setUnsaved(true);
+    }
+
+    /**
+     * Also call {@link #markChunkUnsaved()}.
+     */
+    public void markEnergyChanged() {
+        mFlags |= FLAG_ENERGY_CHANGED;
+        markChunkUnsaved();
     }
 
     /*@Override
