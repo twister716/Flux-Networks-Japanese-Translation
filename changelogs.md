@@ -1,3 +1,10 @@
+### Changelog 1.20.1-7.2.1.15 (2024-04-04)
+* Add GTCEU Modern support (configurable in common.toml)
+* Improve GTEU transfer, allowing multiple amps
+* Fix text fields cannot lose focus on click outside
+* Allow the use of the Enter key to lose focus on a text field
+* Consume all key events for focused text fields, preventing other key bindings from working
+
 ### Changelog 1.20.1-7.2.0.14 (2023-07-02)
 * Port to 1.20.1
 
